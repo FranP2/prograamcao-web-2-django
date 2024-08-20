@@ -14,6 +14,8 @@ class Estado(models.Model):
 class Cidade(models.Model):
     nome = models.CharField(max_length=100)
     populacao = models.PositiveIntegerField()
+    estado = models.ForeignKey(Estado, on_delete=models.CASCADE)
+
 
     def _str_(self):
         return f"{self.nome} (população: {self.populacao})"
