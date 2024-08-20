@@ -1,12 +1,11 @@
 from django.db import models
 
-# Create your models here.
 # Estado tem um relacionamento de muitos para muitos com Cidade
 class Estado(models.Model):
     nome = models.CharField(max_length=100)
-    cidades = models.ManyToManyField('Cidade')
+    cidades = models.ManyToManyField('Cidade', related_name='estados')
 
-    def _str_(self):
+    def __str__(self):
         return self.nome
 
 
@@ -14,10 +13,9 @@ class Estado(models.Model):
 class Cidade(models.Model):
     nome = models.CharField(max_length=100)
     populacao = models.PositiveIntegerField()
-    estado = models.ForeignKey(Estado, on_delete=models.CASCADE)
+    estado = models.ForeignKey(Estado, related_name='cidades_rel', on_delete=models.CASCADE)
 
-
-    def _str_(self):
+    def __str__(self):
         return f"{self.nome} (população: {self.populacao})"
 
 
@@ -25,7 +23,7 @@ class Cidade(models.Model):
 class Capital(models.Model):
     cidade = models.OneToOneField(Cidade, on_delete=models.CASCADE)
 
-    def _str_(self):
+    def __str__(self):
         return f"Capital de {self.cidade.nome}"
 
 
@@ -33,5 +31,5 @@ class Capital(models.Model):
 class Pessoa(models.Model):
     nome = models.CharField(max_length=100)
 
-    def _str_(self):
+    def __str__(self):
         return self.nome
